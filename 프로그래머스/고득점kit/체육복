@@ -1,0 +1,28 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(int n, vector<int> lost, vector<int> reserve) {
+    int answer = n-lost.size();
+    for(int j=0;j<lost.size();j++){
+        int lost_student=lost[j];
+        for(int i=0;i<reserve.size();i++){
+            if (lost_student==reserve[i]){
+                answer++;
+                reserve[i]=-1;
+                break;
+            }
+            else if(lost_student-1==reserve[i]){
+                answer++;
+                reserve[i]=-1;
+                break;
+            }else if(lost_student+1==reserve[i]&lost_student+1!=lost[j+1]){
+                answer++;
+                reserve[i]=-1;
+                 break;
+            }
+        }
+    }
+    return answer;
+}
