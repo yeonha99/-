@@ -1,0 +1,18 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+vector<int> solution(vector<int> array, vector<vector<int>> commands) {
+    vector<int> answer;
+   
+    for(auto set:commands){
+         vector<int> copy;
+       for(int i=set[0]-1;i<set[1];i++){
+           copy.push_back(array[i]);
+       }
+        sort(copy.begin(),copy.end());
+        answer.push_back(copy[set[2]-1]);
+    }
+    return answer;
+}
