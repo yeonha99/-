@@ -1,0 +1,22 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+bool cmp(string a, string b) {
+    return a + b > b + a;
+}
+string solution(vector<int> numbers) {
+    vector<string>copy;
+    for(int num:numbers){
+        copy.push_back(to_string(num));
+    }
+    sort(copy.begin(),copy.end(),cmp);
+       string answer = "";
+    if(copy[0]=="0")return "0";
+    for(string pus:copy){
+        answer+=pus;
+    }
+ 
+
+    return answer;
+}
