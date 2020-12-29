@@ -1,0 +1,16 @@
+#include <string>
+#include <vector>
+using namespace std;
+
+int solution(vector<int> citations) {
+    int answer=0;
+    int cou=0;
+    for(int num=0;num<=citations.size();num++){
+        cou=0;
+        for(int i=0;i<citations.size();i++){
+            if(citations[i]>=num)cou++;
+        }
+        if(cou>=num&num>answer)answer=num;
+    }
+    return answer;
+}
