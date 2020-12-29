@@ -1,0 +1,21 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int solution(string name) {
+    int answer = 0;
+    int size=name.size();
+    int turn=name.size()-1;
+    int name_size=name.size();
+    int prev=0;
+     for(int i=0;i<name.size();i++){
+         if(name[i]=='A') continue;
+         answer+=min(name[i]-'A','Z'-name[i]+1);
+         int next=i+1;
+         while(next<size&&name[next]=='A')next++;
+          turn=min(turn,i+size-next+min(i,size-next));
+         i=next-1;
+    }
+    return answer+=turn;
+}
