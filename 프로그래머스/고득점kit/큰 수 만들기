@@ -1,0 +1,26 @@
+#include <string>
+#include <vector>
+using namespace std;
+
+string solution(string number, int k) {
+
+    string answer = "";
+    int start_ind=0;
+    char max;
+    int max_size=number.size()-k;
+    int max_ind=0;
+    for(int i=0;i<max_size;i++){
+        max=number[start_ind];
+        max_ind=start_ind;
+        for(int j=start_ind;j<=k+i;j++){
+        if(max<number[j]){
+            max=number[j];
+            max_ind=j;
+        }    
+        }
+        start_ind=max_ind+1;
+        answer+=max;
+    }
+ 
+    return answer;
+}
