@@ -1,0 +1,42 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+vector<int> solution(int brown, int yellow) {
+    int sum=brown+yellow;
+    vector <int> ahrt;
+    for(int i=3;i<=sum;i++){
+        if(sum%i==0){
+            ahrt.push_back(i);
+        }
+    }
+    vector<int> save;
+     vector<int> answer;
+    for(int i=0;i<ahrt.size()-1;i++){
+        if(ahrt[i]*ahrt[i]==sum){
+         save.push_back(ahrt[i]);
+        save.push_back(ahrt[i]);
+        break;    
+        }
+        for(int j=i+1;j<ahrt.size();j++){
+        if(ahrt[i]*ahrt[j]==sum){
+            save.push_back(ahrt[j]);
+            save.push_back(ahrt[i]);
+        }
+        }
+    }
+    int row=save[0];
+    int col=save[1];
+    for(int i=2;i<save.size();i=i+2){
+       if(row-col>save[i]-save[i+1]){
+           if((save[i+1]-2)*(save[i]-2)==yellow){
+           row=save[i];
+           col=save[i+1]; 
+           }
+       }
+    }
+    answer.push_back(row);
+    answer.push_back(col);
+    return answer;
+}
