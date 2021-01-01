@@ -1,0 +1,41 @@
+#include <string>
+#include <vector>
+#include <queue>
+using namespace std;
+struct save{
+    int val;
+    int time;
+};
+int solution(int bridge_length, int weight, vector<int> truck_weights) {
+    queue<int> q;
+    for(int a:truck_weights){
+        q.push(a);
+    }
+    int siz=truck_weights.size();
+    int now=q.front();
+    q.pop();
+    int time=1;
+    queue<save> go;//올라가 있는 트럭들 저장
+    go.push({now,time});
+    int num = 0;//지나간 트럭 수 저장
+	while (num!=siz) {
+		time++;
+		if ((time - bridge_length) == go.front().time) {
+			now -= go.front().val;
+			go.pop();
+			num++;
+		}
+		if (!q.empty()) {
+			now += q.front();
+
+			if (now > weight) {
+				now -= q.front();
+			}
+			else {
+				go.push({ q.front(),time });
+				q.pop();
+			}
+		}
+	}
+    return time;
+}
