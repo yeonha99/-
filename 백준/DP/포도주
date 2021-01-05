@@ -1,0 +1,21 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+int cups = 0;
+int alcore[10001];
+int sum[10001];
+int main() {
+	cin >> cups;
+	for (int i = 1; i <= cups; i++)
+	{
+		cin >> alcore[i];
+	}
+	sum[0] = 0;
+	sum[1] = alcore[1];
+	sum[2] = alcore[1] + alcore[2];
+	sum[3] = max(max(alcore[3] + sum[1], alcore[3] + alcore[2] + sum[0]), alcore[2] + alcore[1]);
+	for (int i = 4; i <= cups; i++) {
+		sum[i] = max(max(alcore[i] + sum[i - 2], alcore[i] + alcore[i - 1] + sum[i - 3]), sum[i - 4] + alcore[i - 1] + alcore[i - 2]);
+	}
+	cout << sum[cups];
+}
