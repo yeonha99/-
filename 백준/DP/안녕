@@ -1,0 +1,26 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+int dp[21][101];
+int HP[21];
+int HAPPY[21];
+int main() {
+	int n; 
+	cin >> n;
+	for (int i = 1; i <= n; i++)cin >> HP[i];
+	for (int i = 1; i <= n; i++)cin >> HAPPY[i];
+
+	for (int i = 1; i <= n; i++) {
+		for (int ww = 1; ww <= 100; ww++) {
+			if(ww-HP[i]<=0)
+			dp[i][ww] = dp[i - 1][ww];
+			else
+			{
+				dp[i][ww] = max(dp[i - 1][ww], dp[i - 1][ww - HP[i]] + HAPPY[i]);
+			}
+		
+		}
+	}
+	cout << dp[n][100] << '\n';
+	return 0;
+}
