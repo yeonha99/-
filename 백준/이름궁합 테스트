@@ -1,0 +1,76 @@
+#include <iostream>
+#include <string>
+#include <queue>
+using namespace std;
+int num[26] = { 3,2,1,2,4,3,1,3,1,1,3,1,3,2,1,2,2,2,1,2,1,1,1,2,2,1 };
+int n;
+int m;
+string first;
+string second;
+int main(void) {
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cin >> n>>m;
+	cin >> first >> second;
+	queue<int>save1;
+	queue<int>save2;
+	int i = 0;
+	int j = 0;
+	while (i < n & j < m) {
+		save1.push(num[first[i] - 65]);
+		save1.push(num[second[i] - 65]);
+		i++; j++;
+	}
+
+	if (i < n) {
+		while (i<n)
+		{
+			save1.push(num[first[i] - 65]);
+			i++;
+		}
+	}else if (j < m) {
+		while (j < m)
+		{
+			save1.push(num[second[j] - 65]);
+			j++;
+		}
+	}
+
+	while (1) {
+		if (save1.size() == 2 | save2.size() == 2)break;
+
+		if (save2.empty()) {
+			while (1) {
+				int sav = save1.front();
+				save1.pop();
+				if (save1.empty())break;
+				sav += save1.front();
+				sav = sav % 10;
+				save2.push(sav);
+			}
+		}
+		else if (save1.empty()) {
+			while (1) {
+				int sav = save2.front();
+				save2.pop();
+				if (save2.empty())break;
+				sav += save2.front();
+				sav = sav % 10;
+				save1.push(sav);
+			}
+		}
+	}
+	if (!save1.empty()) {
+		int sav = save1.front();
+		if (sav != 0)cout << sav;
+		save1.pop();
+		cout << save1.front() << "%";
+	}
+	else if (!save2.empty()) {
+		int sav = save2.front();
+		if (sav != 0)cout << sav;
+		save2.pop();
+		cout << save2.front() << "%";
+	}
+	return 0;
+}
