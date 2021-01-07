@@ -1,0 +1,26 @@
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+int n; int m; int h;
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cin >> n>>m;
+	int prev=-1;
+	int now;
+	while (m--) {
+		cin >> now;
+		if (prev == -1) {
+			h = now;
+			prev = now;
+		}
+		else {
+			h = max(h, (now - prev + 1) / 2);
+			prev = now;
+		}
+	}
+	h = max(h, n-prev);
+	cout << h;
+	return 0;
+}
