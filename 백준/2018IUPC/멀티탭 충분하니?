@@ -1,0 +1,16 @@
+#include <iostream>
+using namespace std;
+int n;int k;
+int a[101];
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cin >> n>>k;
+	for (int i = 0; i < k; i++) {
+		cin >> a[i];
+		n -= (a[i] + 1) / 2;
+	}
+	if (n <= 0)cout << "YES";
+	else cout << "NO";
+	return 0;
+}
