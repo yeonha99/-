@@ -1,0 +1,71 @@
+#include <iostream>
+#include <algorithm>
+#include <queue>
+int dx[2] = { 1,0 };
+int dy[2] = { 0,1 };
+using namespace std;
+int n;
+struct save {
+	int x;
+	int y;
+	int val;
+};
+char map[6][6];
+bool visit[6][6] = { 0, };
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cin >> n;
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= n; j++) {
+			cin >> map[i][j];
+		}
+	}
+
+	queue<save> q;
+	q.push({ 1, 1, int(map[1][1])-48 });
+	while(q.front().x!=n|q.front().y!=n)
+	{
+		auto now = q.front();
+
+		for (int i = 0; i < 2; i++) {
+			int move_x = now.x + dx[i];
+			int move_y = now.y + dy[i];
+			if (move_x <= n & move_y <= n) {
+				if (map[move_y][move_x] ==43) {
+					if ((move_x + 1) <= n & move_y <= n) {
+						q.push({ move_x + 1, move_y, q.front().val + int(map[move_y][move_x+1])-48 });
+					
+					}if (move_x <= n & (move_y + 1) <= n) {
+						q.push({ move_x, move_y + 1, q.front().val + int(map[move_y+1][move_x])-48 });
+					}
+				}
+				else if (map[move_y][move_x] == 45) {
+					if ((move_x + 1) <= n & move_y <= n) {
+						q.push({ move_x + 1, move_y, q.front().val - int(map[move_y][move_x + 1]) + 48 });
+					}if (move_x <= n & (move_y + 1) <= n) {
+						q.push({ move_x, move_y + 1, q.front().val - int(map[move_y + 1][move_x]) + 48 });
+					}
+				}
+				else if (map[move_y][move_x] == 42) {
+					if ((move_x + 1) <= n & move_y <= n) {
+						q.push({ move_x + 1, move_y, q.front().val * (int(map[move_y][move_x+1]) - 48) });
+					}if (move_x <= n & (move_y + 1) <= n) {
+						q.push({ move_x, move_y + 1, q.front().val * (int(map[move_y+1][move_x]) - 48) });
+					}
+				}
+			}
+		}
+		q.pop();
+	}
+	int ans_min=q.front().val;
+	int ans_max =ans_min;
+	q.pop();
+	while (!q.empty()) {
+		ans_min = min(ans_min, q.front().val);
+		ans_max = max(ans_max, q.front().val);
+		q.pop();
+	}
+	cout << ans_max<<" "<< ans_min;
+	return 0;
+}
