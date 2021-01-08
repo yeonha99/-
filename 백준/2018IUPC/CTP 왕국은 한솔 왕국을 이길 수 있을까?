@@ -1,0 +1,49 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int n, m;
+vector<vector<int>> p;
+int ctp, h, k;
+bool visit[100001];
+int dfs(int now) {
+	visit[now] = true;
+	int child = 0;
+	for (int next : p[now]) {
+		if (!visit[next])
+			child += dfs(next);
+	}
+	return child + 1;
+}
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(0);
+
+	cin >> n >> m;
+	p.resize(n + 1);
+	while (m--) {
+		int u, v;
+		cin >> u >> v;
+		p[u].push_back(v);
+		p[v].push_back(u);
+	}
+	cin >> ctp >> h >> k;
+	vector<int> g;
+	dfs(h);
+	int ans = dfs(ctp);
+	for (int i = 1; i < n + 1; i++) {
+		if (!visit[i])
+			g.push_back(dfs(i));
+	}
+	sort(g.begin(), g.end(), greater<int>());
+
+	for (int i : g) {
+
+		if (k== 0)
+			break;
+		ans += i;
+		k--;
+	}
+	cout << ans;
+}
