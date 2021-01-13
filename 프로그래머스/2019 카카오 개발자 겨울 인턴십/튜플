@@ -1,0 +1,47 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+bool check=0;
+bool cmp(string a,string b){
+    return a.size()<b.size();
+}
+vector<int> solution(string s) {
+    vector<int> answer;
+    vector<string>sav;
+    string sa;
+    for(int i=2;i<s.size()-1;i++){
+        if(s[i]=='}'){
+            sav.push_back(sa);
+            sa="";
+            i++;
+            continue;
+        }else if(s[i]!='{'){
+            sa+=s[i];
+        }                                
+    }
+    vector<int>::iterator it;
+    sort(sav.begin(),sav.end(),cmp);
+ for (int i = 0; i < sav.size(); i++) {
+		if (i == 0) {
+			answer.push_back(stoi(sav[i]));
+		}
+		else {
+			string c;
+			for (int j = 0; j < sav[i].size(); j++) {
+				if (sav[i][j] == ',') {
+					it = find(answer.begin(), answer.end(), stoi(c));
+					if (it == answer.end())answer.push_back(stoi(c));
+					c = "";
+				}
+				else {
+					c += sav[i][j];
+				}
+			}
+			it = find(answer.begin(), answer.end(), stoi(c));
+			if (it == answer.end())answer.push_back(stoi(c));
+		}
+	}
+    return answer;
+    
+}
