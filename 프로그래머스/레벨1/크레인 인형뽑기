@@ -1,0 +1,31 @@
+#include <string>
+#include <vector>
+#include <cmath>
+#include <stack>
+using namespace std;
+
+int solution(vector<vector<int>> board, vector<int> moves) {
+    int answer = 0;
+    stack<int> save;
+    for(int j=0;j<moves.size();j++){
+        for(int i=0;i<board.size();i++){
+            if(board[i][moves[j]-1]!=0){
+                if(save.size()!=0){
+                    if(board[i][moves[j]-1]==save.top()){
+                        save.pop();
+                        board[i][moves[j]-1]=0;
+                        answer+=2;
+                    }else{
+                      save.push(board[i][moves[j]-1]);
+                      board[i][moves[j]-1]=0;
+                }}else{
+                      save.push(board[i][moves[j]-1]);
+                      board[i][moves[j]-1]=0;
+                }
+                break;
+            }
+        }
+        
+        }
+    return answer;
+}
