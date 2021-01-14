@@ -1,0 +1,25 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int GCD(int a, int b){
+    if (b == 0) {
+        return a;
+    }
+    else {
+        return GCD(b, a%b);
+    }
+}
+int LCM(int a, int b){
+    int g = GCD(a,b);
+    return g * (a/g) * (b/g);
+}
+
+vector<int> solution(int n, int m) {
+    vector<int> answer;
+    int a=GCD(n,m);
+    answer.push_back(a);
+    a=LCM(n,m);
+    answer.push_back(a);
+    return answer;
+}
