@@ -1,0 +1,12 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+bool cmb(char a,char b){
+    return a>b;
+}
+string solution(string s) {
+    sort(s.begin(),s.end(),cmb);
+    string answer = s;
+    return answer;
+}
