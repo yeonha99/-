@@ -1,0 +1,21 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+vector<int> solution(vector<int> arr) {
+    vector<int> answer;
+    if(arr.size()==1){
+        answer.push_back(-1);
+    }else{
+        int m=9999999999;
+        for(int i=0;i<arr.size();i++){
+            m=min(m,arr[i]);
+        }
+        for(int i=0;i<arr.size();i++){
+            if(m!=arr[i])answer.push_back(arr[i]);
+        }
+    }
+    
+    return answer;
+}
