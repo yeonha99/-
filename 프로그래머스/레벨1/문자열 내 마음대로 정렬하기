@@ -1,0 +1,14 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+int ind;
+using namespace std;
+bool cmp(string a,string b){
+    if (a[ind]!=b[ind])return a[ind]<b[ind];
+    else if(a[ind]==b[ind]) return a<b;
+}
+vector<string> solution(vector<string> strings, int n) {
+    ind=n;
+    sort(strings.begin(),strings.end(),cmp);
+    return strings;
+}
