@@ -1,0 +1,22 @@
+#include <string>
+#include <vector>
+using namespace std;
+
+string solution(string s, int n) {
+    string answer = "";
+    for(int i=0;i<s.size();i++){
+        if(s[i]!=' '){
+            if(s[i]+n>'z'&s[i]>='a'){
+            char save='a'+s[i]+n-'z'-1;
+            answer=answer+save;
+            }else if(s[i]+n>'Z'&s[i]<='Z'){
+            char save='A'+s[i]+n-'Z'-1;
+            answer=answer+save;
+            }
+            else answer+=s[i]+n;
+        }
+        else answer+=s[i];
+    }
+
+    return answer;
+}
