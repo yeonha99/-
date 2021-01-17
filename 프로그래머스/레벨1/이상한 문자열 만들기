@@ -1,0 +1,26 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+string solution(string s) {
+    string answer = "";
+    int ind=0;
+    for(int i=0;i<s.size();i++){
+        if(s[i]==' '){answer+=s[i];
+                     ind=0;
+                     continue;
+                     }
+        else if(s[i]>='a'){
+            if(ind%2==0)
+            answer+=s[i]-'a'+'A';
+            else answer+=s[i];
+        }else{
+            if(ind%2!=0)
+            answer+=s[i]-'A'+'a';
+            else answer+=s[i];
+        }
+        ind++;
+    }
+    return answer;
+}
