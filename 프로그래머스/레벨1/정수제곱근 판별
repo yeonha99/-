@@ -1,0 +1,12 @@
+#include <string>
+#include <vector>
+#include <cmath>
+using namespace std;
+
+long long solution(long long n) {
+    long long answer = 0;
+    long long hafe=sqrt(n);
+    if(hafe*hafe!=n)answer=-1;
+    else answer=(hafe+1)*(hafe+1);
+    return answer;
+}
