@@ -1,0 +1,31 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+
+int solution(string skill, vector<string> skill_trees) {
+    int answer = 0;
+    vector<char> skil;
+    for(int i=0;i<skill.size();i++){
+        skil.push_back(skill[i]);
+    }
+    vector<char>::iterator it;
+    for(int i=0;i<skill_trees.size();i++){
+        int num=0;//index접근용
+        bool go=1;//순서에 맞게 갔는지 판별용
+        for(int j=0;j<skill_trees[i].size();j++){
+            it=find(skil.begin(),skil.end(),skill_trees[i][j]);
+            if(it==skil.end())continue;//스킬트리랑 상관없으면 무시
+            else{
+                cout<<it-skil.begin()<<endl;
+                if(num!=(it-skil.begin())){//순서대로 배우지 않고 있으면
+                  go=0;  
+                    break; }
+                else num++;//순서랑 일치한거 발견시 비교해야할 index 증가
+            }
+        }
+        if(go==1)answer++;//모든 스킬트리 검사결과 순서에 맞으면 정답 증가
+    }
+    return answer;
+}
