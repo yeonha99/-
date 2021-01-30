@@ -1,0 +1,25 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+
+string solution(string s) {
+    string answer = "";
+    int mi=999999999;
+    int ma=-999999999;
+    string now="";
+    for(int i=0;i<s.size();i++){
+        if(s[i]!=' '){
+            now+=s[i];
+        }else{
+            mi=min(mi,stoi(now));
+            ma=max(ma,stoi(now));
+            now="";
+        }
+    }
+    mi=min(mi,stoi(now));
+    ma=max(ma,stoi(now));
+    answer=to_string(mi)+' '+to_string(ma);
+    return answer;
+}
