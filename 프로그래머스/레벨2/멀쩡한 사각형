@@ -1,0 +1,19 @@
+#include <algorithm>
+using namespace std;
+long long m(long long w,long long h){
+    long long c;
+    while(h!=0){
+        c=w%h;
+        w=h;
+        h=c;
+    }
+    return w;
+}
+long long solution(int w,int h) {
+    long long W=w;
+    long long H=h;
+    long long answer = W*H;
+    long long cross=(W+H)-m(W,H);
+  
+    return answer-cross;
+}
