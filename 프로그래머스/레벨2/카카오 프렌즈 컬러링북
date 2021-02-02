@@ -1,0 +1,58 @@
+#include <vector>
+#include <queue>
+#include <iostream>
+using namespace std;
+int dx[]={-1,1,0,0};
+int dy[]={0,0,-1,1};
+bool visit[101][101]={0,};
+struct save{
+    int i;
+    int j;
+};
+int BFS(int i,int j,int m,int n,vector<vector<int>> picture){
+    queue<save> q;
+    q.push({i,j});
+    visit[i][j]=1;
+    int size=1;
+    while(!q.empty()){
+        auto it=q.front();
+        q.pop();
+    for(int k=0;k<4;k++){
+        int x=it.j+dx[k];
+        int y=it.i+dy[k];
+        if(y<m&x<n&x>=0&y>=0){
+            if(picture[i][j]==picture[y][x]&visit[y][x]==0){
+            q.push({y,x});
+            visit[y][x]=1;
+            size++;
+        }
+    }  
+    }
+}
+    return size;
+}
+// 전역 변수를 정의할 경우 함수 내에 초기화 코드를 꼭 작성해주세요.
+vector<int> solution(int m, int n, vector<vector<int>> picture) {
+    int number_of_area = 0;
+    int max_size_of_one_area = 0;
+    
+    for(int i=0;i<picture.size();i++){
+        for(int j=0;j<picture[i].size();j++){
+    visit[i][j]=0;
+        }
+    }
+    
+    for(int i=0;i<picture.size();i++){
+        for(int j=0;j<picture[i].size();j++){
+            if(picture[i][j]!=0&visit[i][j]==0){
+                int size=BFS(i,j,m,n,picture);
+                if(size>max_size_of_one_area)max_size_of_one_area=size;
+                number_of_area++;
+            }
+        }
+    }
+    vector<int> answer(2);
+    answer[0] = number_of_area;
+    answer[1] = max_size_of_one_area;
+    return answer;
+}
