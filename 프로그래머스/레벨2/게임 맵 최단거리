@@ -1,0 +1,40 @@
+#include<vector>
+#include<queue>
+#include<algorithm>
+#include<iostream>
+using namespace std;
+struct save{
+    int i;
+    int j;
+    int cnt;
+};
+bool visit[101][101]={0,};
+int move_i[4]={0,0,1,-1};
+int move_j[4]={1,-1,0,0};
+int BFS(vector<vector<int> > maps){
+    queue<save> q;
+    q.push({0,0,1});
+    visit[0][0]=1;
+   while(!q.empty()){
+       auto v=q.front();
+       if(v.i==maps.size()-1&v.j==maps[0].size()-1){
+           return v.cnt;
+       }
+       q.pop();
+       for(int i=0;i<4;i++){
+           if(v.i+move_i[i]<maps.size()&v.i+move_i[i]>=0&v.j+move_j[i]<maps[0].size()&v.j+move_j[i]>=0){
+           if(visit[v.i+move_i[i]][v.j+move_j[i]]==0&maps[v.i+move_i[i]][v.j+move_j[i]]==1){
+               q.push({v.i+move_i[i],v.j+move_j[i],v.cnt+1});
+               visit[v.i+move_i[i]][v.j+move_j[i]]=1;
+           }
+       }
+       }
+   }
+    return -1;
+}
+int solution(vector<vector<int> > maps)
+{
+    int answer = 0;
+    answer=BFS(maps);
+    return answer;
+}
