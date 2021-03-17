@@ -1,0 +1,29 @@
+#include <string>
+#include <vector>
+#include <iostream>
+using namespace std;
+
+vector<int> solution(string s) {
+    vector<int> answer;
+    int all=0;//0 제거한 횟수
+    int roop=0;//변환횟수
+    while(s!="1"){
+    for(int i=0;i<s.size();i++){
+        if(s[i]=='0'){
+        s.erase(i,1);
+            all++;
+            i--;
+        }
+    }
+    int num=s.size();
+    s="";
+    while(num>0){
+        s+=to_string(num%2);
+        num/=2;
+    }
+        roop++;
+    }
+    answer.push_back(roop);
+    answer.push_back(all);
+    return answer;
+}
