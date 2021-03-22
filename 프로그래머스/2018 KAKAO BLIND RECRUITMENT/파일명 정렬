@@ -1,0 +1,53 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+
+vector<string> spl(string name){
+    transform(name.begin(), name.end(), name.begin(), ::tolower);
+    vector<string> ret;
+    bool check = false;
+    int number;
+    for(int i=0;i<name.size();i++){
+        if(name[i] >= '0' && name[i] <= '9'){
+            if(check == false){
+                ret.push_back(name.substr(0, i));
+                number = i;
+                check = true;
+            }
+        }else{
+            if(check == true&(name[i]=='.'|name[i]==' ')){
+                ret.push_back(name.substr(number, i-number));
+                return ret;
+            }
+        }
+    }
+
+}
+
+bool cmp(string a, string b){
+    
+    vector<string>split= spl(a);
+    string head = split[0];
+    int num = stoi(split[1]);
+    
+    vector<string>split2= spl(b);
+    string head2 = split2[0];
+    int num2 = stoi(split2[1]);
+    if(head <  head2)
+        return true;
+    else if(head >= head2){
+        if(head == head2){
+            if(num < num2)
+                return true;
+            else if(num >= num2)
+                return false; } 
+        return false; 
+    }
+}
+
+vector<string> solution(vector<string> files) {
+    stable_sort(files.begin(), files.end(), cmp);
+    return files;
+}
