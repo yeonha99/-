@@ -1,0 +1,54 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+struct save{
+    string s;
+    int t;
+};
+bool cmp(save a,save b){
+    return a.t<b.t;
+}
+int solution(int cacheSize, vector<string> cities) {
+    int answer = 0;
+    vector<save> cach;
+    if(cacheSize==0)return cities.size()*5;
+    for(int i=0;i<cities.size();i++){
+     transform(cities[i].begin(),cities[i].end(),cities[i].begin(),::tolower);   
+    }
+    for(int i=0;i<cities.size();i++){
+        sort(cach.begin(),cach.end(),cmp);
+        if(cach.size()<cacheSize){
+                int it=-1;
+            for(int j=0;j<cach.size();j++){
+                if(cach[j].s==cities[i]){it=j;
+                                        break;
+                                        }
+            }
+            if(it==-1){
+            cach.push_back({cities[i],i});
+            answer+=5;
+            }else {
+                answer+=1;
+                cach[it].t=i;
+                  }
+        }else{
+                     int it=-1;
+            for(int j=0;j<cach.size();j++){
+                if(cach[j].s==cities[i]){it=j;
+                                        break;
+                                        }
+            }
+            if(it==-1){
+                cach.erase(cach.begin());
+                cach.push_back({cities[i],i});
+                 answer+=5;
+            }else{
+                answer+=1;
+                cach[it].t=i;
+            }
+        }
+    }
+    return answer;
+}
