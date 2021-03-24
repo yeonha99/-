@@ -1,0 +1,103 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+struct im{
+    string s;
+    int t;
+};
+bool cmp(im a,im b){
+    return a.t>b.t;
+}
+//C#->Q,D#->W,F#->R,G#->T,A#->Y
+string solution(string m, vector<string> musicinfos) {
+    string answer ="(None)";
+    vector<im> ans;
+    for(int i=0;i<m.size();i++){
+         if(m[i]=='#'){
+                string check=m.substr(i-1,2);
+                if(check=="C#"){
+                    m.erase(i,1);
+                    i--;
+                    m[i]='Q';
+                }else if(check=="D#"){
+                    m.erase(i,1);
+                    i--;
+                    m[i]='W';
+                }else if(check=="F#"){
+                      m.erase(i,1);
+                    i--;
+                    m[i]='R';
+                }else if(check=="G#"){
+                     m.erase(i,1);
+                    i--;
+                    m[i]='T';
+                }else if(check=="A#"){
+                     m.erase(i,1);
+                    i--;
+                    m[i]='Y';
+                }
+            }
+    }
+     for(int i=0;i<musicinfos.size();i++){
+        int prev=0;
+        int now=0;
+        string save[4];
+        int id=0;
+        now=musicinfos[i].find(",");
+        while(now!=-1){
+        save[id]=musicinfos[i].substr(prev,now-prev);
+        id++;
+        prev=now+1;
+        now=musicinfos[i].find(",",prev);
+        }
+        save[id]=musicinfos[i].substr(prev,now-prev);
+        for(int j=0;j<save[3].size();j++){
+            if(save[3][j]=='#'){
+                string check=save[3].substr(j-1,2);
+                if(check=="C#"){
+                    save[3].erase(j,1);
+                    j--;
+                    save[3][j]='Q';
+                }else if(check=="D#"){
+                   save[3].erase(j,1);
+                    j--;
+                    save[3][j]='W';
+                }else if(check=="F#"){
+                    save[3].erase(j,1);
+                    j--;
+                    save[3][j]='R';
+                }else if(check=="G#"){
+                   save[3].erase(j,1);
+                    j--;
+                    save[3][j]='T';
+                }else if(check=="A#"){
+                     save[3].erase(j,1);
+                    j--;
+                    save[3][j]='Y';
+                }
+            }
+        }
+        int t;
+        int size=save[3].size();
+        int p=stoi(save[1].substr(0,2));
+        t=p-stoi(save[0].substr(0,2));
+        if(t<0)t=t*-1;
+        t=t*60;
+        t+=stoi(save[1].substr(3,2))-stoi(save[0].substr(3,2));
+        for(int j=save[3].size();j<t;j++){
+            save[3]+=save[3][j-size];
+        }
+        if(t<save[3].size()){
+            save[3].erase(t,save[3].size()-t);
+        }
+        if(save[3].find(m)!=-1){
+       
+            ans.push_back({save[2],t});
+        }
+    }
+    if(!ans.empty()){stable_sort(ans.begin(),ans.end(),cmp);
+    answer=ans[0].s;}
+    return answer;
+}
