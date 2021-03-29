@@ -1,0 +1,33 @@
+#include <string>
+#include <vector>
+#include <iostream>
+using namespace std;
+
+string solution(int n, int t, int m, int p) {
+    string answer = "";
+    char arr[16]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'
+    };
+    int id=0;
+    int index=0;
+    while(answer.size()<t){
+           if(id==0&&p==1){answer+='0';
+                           index++;
+            }else if(id==0)index++;
+            int num=id;
+            string s="";
+            while(num>0){
+                s=arr[num%n]+s;
+                num=num/n;
+            }
+            for(int i=0;i<s.size();i++){
+               
+                if(index%m==p-1){answer+=s[i];
+                                if(answer.size()>=t)break;
+                                }
+                index++;
+            }
+
+        id++;
+    }
+    return answer;
+}
