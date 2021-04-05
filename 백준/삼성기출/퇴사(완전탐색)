@@ -1,0 +1,24 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+int n;
+int arr[16][2];
+int ans;
+void DFS(int index,int val) {
+	if (index==n+1) {
+		ans=max(ans, val);
+		return;
+	}
+	if (index + arr[index][0] <= n + 1)DFS(index + arr[index][0], val + arr[index][1]);
+	if (index + 1 <= n + 1)DFS(index + 1, val);
+}
+int main()
+{
+	cin >> n;
+	for (int i = 1; i <= n; i++) {
+		cin >> arr[i][0] >> arr[i][1];
+	}
+	DFS(1,0);
+	cout << ans;
+	return 0;
+}
