@@ -1,0 +1,105 @@
+#include<iostream>
+#include<algorithm>
+#include<queue>
+using namespace std;
+int r, c, t;
+int arr[51][51];
+bool visit[51][51];
+int move_i[4] = {1,0,0,-1};
+int move_j[4] = {0,-1,1,0};
+int ans;
+int up=-1;
+int down=-1;
+struct save {
+	int i;
+	int j;
+	int val;
+};
+void BFS(int i,int j) {
+	queue<save> q;
+	q.push({ i, j, arr[i][j] });
+	visit[i][j] = 1;
+	while (!q.empty())
+	{
+		auto a = q.front();
+		q.pop();
+		int check = 0;
+		for (int k = 0; k < 4; k++) {
+			int ni = a.i + move_i[k];
+			int nj = a.j + move_j[k];
+			if (ni<1 || ni>r || nj<1 || nj>c)continue;
+			if (arr[ni][nj] == -1)continue;
+			if (visit[ni][nj] == 0 && arr[ni][nj] > 0) {
+				q.push({ ni,nj,arr[ni][nj] });
+				visit[ni][nj] = 1;	
+			}
+			arr[ni][nj]= arr[ni][nj]+a.val / 5;
+			check++;		
+		}
+		arr[a.i][a.j]-=check* (a.val / 5);
+	}
+}
+int main()
+{
+	cin >> r >> c >> t;
+
+	for (int i = 1; i <= r; i++) {
+		for (int j = 1; j <= c; j++) {
+			cin >> arr[i][j];
+			if (up == -1 && arr[i][j] == -1)up = i;
+			else if (arr[i][j] == -1)down = i;
+		}
+	}
+
+	while (t--> 0) {
+		for (int i = 1; i <= r; i++) {
+			for (int j = 1; j <= c; j++) {
+				if (arr[i][j] == 0)visit[i][j] = 1;
+				else visit[i][j] = 0;
+			}
+		}
+		for (int i = 1; i <= r; i++) {
+			for (int j = 1; j <= c; j++) {
+				if(arr[i][j])
+				if (arr[i][j] > 0 && visit[i][j] == 0) {
+					BFS(i, j);
+				}
+			}
+		}
+		for (int i = up - 1; i > 1; i--) {
+			arr[i][1] = arr[i - 1][1];
+		}
+		for (int j = 2; j <= c; j++) {
+			arr[1][j - 1] = arr[1][j];
+		}
+	
+		for (int i = 2; i <= up; i++) {
+			arr[i - 1][c] = arr[i][c];
+		}
+		for (int j = c; j > 2; j--) {
+			arr[up][j] = arr[up][j - 1];
+		}
+		arr[up][2] = 0;
+
+		for (int i = down+1; i < r; i++) {
+			arr[i][1] = arr[i + 1][1];
+		}
+		for (int j = 2; j <= c; j++) {
+			arr[r][j - 1] = arr[r][j];
+		}
+		for (int i = r; i > down; i--) {
+			arr[i][c] = arr[i - 1][c];
+		}
+		for (int j = c; j > 2; j--) {
+			arr[down][j] = arr[down][j - 1];
+		}
+		arr[down][2] = 0;
+	}
+	for (int i = 1; i <= r; i++) {
+		for (int j = 1; j <= c; j++) {
+			if (arr[i][j] > 0)ans += arr[i][j];
+		}
+	}
+	cout << ans;
+	return 0;
+}
