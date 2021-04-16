@@ -1,0 +1,155 @@
+#include<iostream>
+#include<cstring>
+#include<vector>
+#include<algorithm>
+using namespace std;
+int n, m;
+int arr[9][9] = {0,};
+int ans = 65;
+
+struct save {
+	int i;
+	int j;
+	int val;
+};
+vector<save> q;
+void view(int i,int j,int angle) {
+	if (angle == 0) {
+		for (int k = j; k < m; k++) {
+			if (arr[i][k] == 6)break;
+			else if (arr[i][k] == 0)arr[i][k] = 7;
+		}
+	}
+	else if (angle == 1) {
+		for (int k = i; k >= 0; k--) {
+			if (arr[k][j] == 6)break;
+			else if (arr[k][j] == 0)arr[k][j] = 7;
+		}
+	}
+	else if (angle == 2) {
+		for (int k = j; k >= 0; k--) {
+			if (arr[i][k] == 6)break;
+			else if (arr[i][k] == 0)arr[i][k] = 7;
+		}
+	}
+	else if (angle == 3) {
+		for (int k = i; k < n; k++) {
+			if (arr[k][j] == 6)break;
+			else if (arr[k][j] == 0)arr[k][j] = 7;
+		}
+	}
+}
+void re(int copys[9][9]) {
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			arr[i][j] = copys[i][j];
+		}
+	}
+}
+void DFS(int top) {
+	if (top == q.size()) {
+		int count = 0;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				if (arr[i][j] == 0) count++;
+				
+			}
+		}
+		ans=min(count, ans);
+		return;
+	}
+	int copys[9][9] = { 0, };
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			copys[i][j] = arr[i][j];
+		}
+	}
+	if (q[top].val == 1) {
+			view(q[top].i, q[top].j, 0);
+			DFS(top+1);
+			re(copys);
+			view(q[top].i, q[top].j, 1);
+			DFS(top + 1);
+			re(copys);
+			view(q[top].i, q[top].j, 2);
+			DFS(top + 1);
+			re(copys);
+			view(q[top].i, q[top].j, 3);
+			DFS(top + 1);
+			re(copys);
+
+	}
+	else if (q[top].val == 2) {		
+			view(q[top].i, q[top].j, 0);
+			view(q[top].i, q[top].j, 2);
+			DFS(top + 1);
+			re(copys);
+			view(q[top].i, q[top].j, 1);
+			view(q[top].i, q[top].j, 3);
+			DFS(top + 1);
+			re(copys);		
+		}
+		else if (q[top].val == 3) {
+			view(q[top].i, q[top].j, 0);
+			view(q[top].i, q[top].j, 1);
+			DFS(top + 1);
+			re(copys);
+			view(q[top].i, q[top].j, 1);
+			view(q[top].i, q[top].j, 2);
+			DFS(top + 1);
+			re(copys);
+			view(q[top].i, q[top].j, 2);
+			view(q[top].i, q[top].j, 3);
+			DFS(top + 1);
+			re(copys);
+			view(q[top].i, q[top].j, 3);
+			view(q[top].i, q[top].j, 0);
+			DFS(top + 1);
+			re(copys);
+		}
+		else if (q[top].val == 4) {
+			view(q[top].i, q[top].j, 0);
+			view(q[top].i, q[top].j, 1);
+			view(q[top].i, q[top].j, 2);
+			DFS(top + 1);
+			re(copys);
+			view(q[top].i, q[top].j, 1);
+			view(q[top].i, q[top].j, 2);
+			view(q[top].i, q[top].j, 3);
+			DFS(top + 1);
+			re(copys);
+			view(q[top].i, q[top].j, 2);
+			view(q[top].i, q[top].j, 3);
+			view(q[top].i, q[top].j, 0);
+			DFS(top + 1);
+			re(copys);
+			view(q[top].i, q[top].j, 3);
+			view(q[top].i, q[top].j, 0);
+			view(q[top].i, q[top].j, 1);
+			DFS(top + 1);
+			re(copys);
+		}
+		else if (q[top].val == 5) {
+			view(q[top].i, q[top].j, 0);
+			view(q[top].i, q[top].j, 1);
+			view(q[top].i, q[top].j, 2);
+			view(q[top].i, q[top].j, 3);
+			DFS(top + 1);
+			re(copys);
+		}
+}
+int main()
+{
+	cin >> n>>m;
+	
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			cin >> arr[i][j];
+			if (arr[i][j] != 0 && arr[i][j] != 6) q.push_back({i,j,arr[i][j]});
+
+		}
+	}
+	DFS(0);
+	cout << ans << endl;
+	return 0;
+}
