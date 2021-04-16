@@ -1,0 +1,91 @@
+#include<iostream>
+#include<cstring>
+#include<queue>
+using namespace std;
+int n, l,r;
+int arr[101][101] = {0,};
+int copys[101][101] = { 0, };
+int visit[101][101] = { 0, };
+int move_i[4] = {1,-1,0,0};
+int move_j[4] = {0,0,1,-1};
+
+struct save {
+	int i;
+	int j;
+};
+bool solve(int i,int j,int check) {
+	queue<save> q;
+	q.push({ i, j });
+	int sum = 0;
+	int num = 0;
+	while (!q.empty()) {
+		auto it = q.front();
+		q.pop();
+		sum += arr[it.i][it.j];
+		num++;
+		for (int k = 0; k < 4; k++) {
+			int di = it.i + move_i[k];
+			int dj = it.j + move_j[k];
+			if (di < 0 || dj < 0 || di >= n || dj >= n)continue;
+		
+			int ans=arr[it.i][it.j] - arr[di][dj];
+			if (ans < 0)ans *= -1;
+			if (l <= ans && ans <= r) {
+				if (visit[di][dj] == 0) {
+					visit[di][dj] = check;
+					q.push({ di,dj });
+					
+				}
+				if(visit[it.i][it.j]==0)
+					visit[it.i][it.j] = check;
+			}
+		}
+	}
+	if (num == 1)return 0;
+
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (visit[i][j] == check) {
+				copys[i][j] = sum / num;
+			}
+		}
+	}
+	return 1;
+}
+int main()
+{
+	cin >> n>>l>>r;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			cin >> arr[i][j];
+			copys[i][j] = arr[i][j];
+		}
+		
+	}
+	int roop = 0;
+	while (1) {
+		
+		int check = 1;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (visit[i][j] == 0) {
+					if (solve(i, j,check)) {
+						check++;
+					}
+				}
+				
+			}
+
+		}
+		if (check == 1)break;
+		else roop++;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				arr[i][j] = copys[i][j];
+				visit[i][j] = 0;
+			}
+		}
+	}
+	cout << roop << endl;
+	return 0;
+}
