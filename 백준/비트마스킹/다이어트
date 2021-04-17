@@ -1,0 +1,68 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include <map>
+using namespace std;
+int n;
+int mp;
+int mf;
+int ms;
+int mv;
+struct save {
+	int p;
+	int f;
+	int s;
+	int v;
+	int c;
+};
+map<int, vector<vector<int>>> m;
+int answer = 987654321;
+vector<save> arr;
+int main() {
+	cin >> n;
+	cin >> mp >> mf >> ms >> mv;
+	int p;
+	int f;
+	int s;
+	int v;
+	int c;
+	int sa = n;
+	while (n--) {
+		cin >> p >> f >> s >> v>>c;
+		arr.push_back({p,f,s,v,c});
+	}
+	n = sa;
+	for (int i = 1; i < (1 << n); i++) {
+		int s1 = 0;
+		int s2 = 0;
+		int s3 = 0;
+		int s4 = 0;
+		int s5 = 0;
+		vector<int> temp;
+		for (int j = 0; j < n; j++) {
+			if (i & (1<<j)) {
+				s1 += arr[j].p;
+				s2 += arr[j].f;
+				s3 += arr[j].s;
+				s4 += arr[j].v;
+				s5 += arr[j].c;
+				temp.push_back(j+1);
+			}
+		}
+		
+		if (s1 >= mp && s2 >= mf && s3 >= ms && s4 >= mv) {
+			if (answer >= s5) {
+				answer = s5;
+				m[s5].push_back(temp);
+			}
+		}
+	}
+	if (answer == 987654321)cout << -1 << endl;
+	else {
+		cout << answer << endl;
+		sort(m[answer].begin(), m[answer].end());
+		for (int a : m[answer][0]){
+			cout<<a<<" ";
+			}
+	}
+}
