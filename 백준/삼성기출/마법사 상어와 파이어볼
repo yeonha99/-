@@ -1,0 +1,99 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+using namespace std;
+int n, M, k, r, c, m, s, d;
+struct save {
+	int r;
+	int c;
+	int m;
+	int d;
+	int s;
+}; 
+struct save2 {
+	int m;
+	int d;
+	int s;
+};
+int movex[] = {0,1,1,1,0,-1,-1,-1};
+int movey[] = {-1,-1,0,1,1,1,0,-1};
+vector<save2> arr[51][51];
+vector<save> fire;
+void move() {
+	vector<save> temp;
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= n; j++) {
+			arr[i][j].clear();
+		}
+	}
+	for (int id = 0; id < fire.size(); id++) {
+		int y = fire[id].r+movey[fire[id].d]*fire[id].s;
+		int x = fire[id].c+movex[fire[id].d]*fire[id].s;
+		while (y < 1) {
+			y += n;
+		}
+		while (x < 1) {
+			x += n;
+		}
+		while (y >n) {
+			y -= n;
+		}
+		while (x > n) {
+			x -= n;
+		}
+		arr[y][x].push_back({fire[id].m,fire[id].d,fire[id].s});
+	}
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= n; j++) {
+			if (arr[i][j].size() == 0)continue;
+			else if (arr[i][j].size() == 1) {
+				temp.push_back({ i,j,arr[i][j][0].m,arr[i][j][0].d,arr[i][j][0].s });
+			}
+			else {
+				int sum=0;
+				int view=0;
+				bool even = 0;
+				bool odd = 0;
+				for (int k = 0; k < arr[i][j].size(); k++) {
+					sum += arr[i][j][k].m;
+					view += arr[i][j][k].s;
+					if (arr[i][j][k].d % 2 == 0)even = 1;
+					else odd = 1;
+				}
+				int nm = sum / 5;
+				if (nm == 0)continue;
+				int ns = view / arr[i][j].size();
+				if (even == 1 && odd == 1) {
+					temp.push_back({ i,j,nm,1,ns });
+					temp.push_back({ i,j,nm,3,ns });
+					temp.push_back({ i,j,nm,5,ns });
+					temp.push_back({ i,j,nm,7,ns });
+				}
+				else {
+					temp.push_back({ i,j,nm,0,ns });
+					temp.push_back({ i,j,nm,2,ns });
+					temp.push_back({ i,j,nm,4,ns });
+					temp.push_back({ i,j,nm,6,ns });
+				}
+
+			}
+		}
+	}
+
+	fire = temp;
+}
+int main() {
+	cin >> n >> M >> k;
+	while (M--) {
+		cin >> r >> c >> m >> s >> d;
+		fire.push_back({r,c,m,d,s });
+	}
+	while (k--) {
+		move();
+	}
+	int ans = 0;
+	for (int i = 0; i < fire.size(); i++) {
+		ans += fire[i].m;
+	}
+	cout << ans << endl;
+}
