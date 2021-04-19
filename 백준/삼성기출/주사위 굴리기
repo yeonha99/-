@@ -1,0 +1,104 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include <map>
+using namespace std;
+int arr[21][21];
+int n;
+int m;
+int x;
+int y;
+int k;
+struct dice {
+	int up;
+	int down;
+	int right;
+	int left;
+	int u;
+	int p;
+};
+dice d;
+void move(int dir) {
+	int up=d.up;
+	int down=d.down;
+	int right=d.right;
+	int left=d.left;
+	int u=d.u;
+	int p=d.p;
+	if (dir == 1) {
+		if (y + 1 >= m)return;
+		y++;
+		d.left = down;
+		d.down = right;
+		d.right = up;
+		d.up = left;
+
+		if (arr[x][y] == 0) {
+			arr[x][y] = d.down;
+		}
+		else {
+			d.down = arr[x][y];
+			arr[x][y] = 0;
+		}
+	}
+	else if (dir == 2) {
+		if (y-1<0)return;
+		y--;
+		d.left = up;
+		d.down = left;
+		d.right = down;
+		d.up = right;
+		if (arr[x][y] == 0) {
+			arr[x][y] = d.down;
+		}
+		else {
+			d.down = arr[x][y];
+			arr[x][y] = 0;
+		}
+	}
+	else if (dir == 3) {
+		if (x- 1 < 0)return;
+		x--;
+		d.u = up;
+		d.p = down;
+		d.down = u;
+		d.up = p;
+		if (arr[x][y] == 0) {
+			arr[x][y] = d.down;
+		}
+		else {
+			d.down = arr[x][y];
+			arr[x][y] = 0;
+		}
+	}
+	else if (dir == 4) {
+		if (x+1 >= n)return;
+		x++;
+		d.u = down;
+		d.p = up;
+		d.down = p;
+		d.up = u;
+		if (arr[x][y] == 0) {
+			arr[x][y] = d.down;
+		}
+		else {
+			d.down = arr[x][y];
+			arr[x][y] = 0;
+		}
+	}
+	cout << d.up << endl;
+}
+int main() {
+	cin >> n >> m;
+	cin >> x >> y >> k;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			cin >> arr[i][j];
+		}
+	}
+	int dir;
+	while (k--) {
+		cin >> dir;
+		move(dir);
+	}
+}
