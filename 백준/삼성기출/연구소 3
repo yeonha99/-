@@ -1,0 +1,93 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <deque>
+using namespace std;
+int n;
+int m;
+struct save {
+	int i;
+	int j;
+	int cnt=0;
+};
+vector<save> v;
+int arr[51][51];
+int mx[] = { 1,-1,0,0 };
+int my[] = { 0,0,1,-1 };
+int result = 987654321;
+void DFS(int id, deque<save> q) {
+	if (q.size() == m) {
+		int visit[51][51];
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (arr[i][j] == 1)visit[i][j] = -1;
+				else visit[i][j] = -2;
+			}
+		}
+
+		int time = 0;
+		for (int i = 0; i < q.size(); i++) {
+			visit[q.at(i).i][q.at(i).j] = 0;
+		}
+		while (!q.empty()) {
+			auto it = q.front();
+			q.pop_front();
+			for (int k = 0; k < 4; k++) {
+				int dy = it.i + my[k];
+				int dx = it.j + mx[k];
+				if (dy < 0 || dx < 0 || dy >= n || dx >= n)continue;
+				if (visit[dy][dx] == -1)continue;
+				
+				if (visit[dy][dx] == -2) {
+					q.push_back({ dy,dx,it.cnt + 1 });
+					if (arr[dy][dx] == 2) {
+						visit[dy][dx] = -3;
+					}
+					else {
+						visit[dy][dx] = it.cnt + 1;
+						time = max(time, it.cnt + 1);
+					}
+					
+				}
+			}
+		}
+		bool check = 0;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (visit[i][j] == -2) {
+					check = 1;
+			}
+			}
+		}
+		if (check == 1)return;
+		else {
+			result = min(time, result);
+			return;
+		}
+	}
+	else {
+		for (int i = id + 1; i < v.size(); i++) {
+			q.push_back({ v[i].i,v[i].j });
+			DFS(i, q);
+			q.pop_back();
+		}
+	}
+}
+int main() {
+	cin >> n;
+	cin >> m;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			cin >> arr[i][j];
+			if (arr[i][j] == 2)v.push_back({i,j});
+		}
+	}
+	deque<save> q;
+	for (int i = 0; i < v.size(); i++) {
+		q.push_back({v[i].i,v[i].j});
+		DFS(i,q);
+		q.pop_back();
+	}
+	if (result == 987654321)result = -1;
+	cout << result << endl;
+}
