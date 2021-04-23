@@ -1,0 +1,154 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <queue>
+using namespace std;
+int n;
+int m;
+int oil;
+int msize;
+int arr[21][21];
+struct texs {
+	int i;
+	int j;
+};
+struct people {
+	int ti;
+	int tj;
+};
+vector<people> pe;
+texs texi;
+struct que {
+	int i;
+	int j;
+	int cnt;
+};
+int movey[] = { -1,0,1,0 };
+int movex[] = { 0,-1,0,1 };
+bool BFS() {
+	int visit[21][21] = {0,};
+	int dis = 987654321;
+	int ind = 0;
+	if (arr[texi.i][texi.j] < 0) {//택시있는 곳에 손님 있는 경우 처리
+		dis = 0;
+		ind = arr[texi.i][texi.j] * -1;
+		ind--;
+		arr[texi.i][texi.j] = 0;
+	}
+	else {//택시 있는 곳에 손님 없을 경우 가까운 손님 찾기
+		queue<que> t;
+		t.push({ texi.i,texi.j,1 });
+		visit[texi.i][texi.j] = 1;
+		while (!t.empty()) {
+			auto it = t.front();
+			t.pop();
+			for (int k = 0; k < 4; k++) {
+				int dy = it.i + movey[k];
+				int dx = it.j + movex[k];
+				if (dy < 1 || dx < 1 || dy > n || dx > n)continue;
+				if (visit[dy][dx] == 0 && arr[dy][dx] != 1) {
+					t.push({ dy,dx,it.cnt + 1 });
+					visit[dy][dx] = it.cnt + 1;
+					if (arr[dy][dx] < 0)
+						dis = min(dis, it.cnt + 1);
+				}
+			}
+		}
+		if (dis == 987654321) {//손님 못태움
+			return 0;
+		}
+	
+		for (int i = 1; i <= n; i++) {//우선순위 손님 태우러 가기 및 타겟 설정
+			for (int j = 1; j <= n; j++) {
+				if (visit[i][j] == dis && arr[i][j] < 0) {
+					dis--;
+					ind = arr[i][j] * -1;
+					ind--;
+					texi.i = i;
+					texi.j = j;
+					arr[i][j] = 0;
+					oil = oil - dis;
+					break;
+				}
+			}
+		}
+	}
+	if (oil <= 0)return 0;//태우러가다가 오일 다씀
+		int y = pe[ind].ti;
+		int x = pe[ind].tj;
+		if (y == texi.i && x == texi.j) {//가는 곳이 타는 곳
+			msize--;
+			return 1;
+		}
+	
+	int visit2[21][21] = {0,};
+	queue<que> t2;
+	t2.push({ texi.i,texi.j,1 });
+	visit2[texi.i][texi.j] = 1;
+	int dis2 = 0;
+	while (!t2.empty()) {//가는 곳까지 최단거리
+		auto it = t2.front();
+		t2.pop();
+		for (int k = 0; k < 4; k++) {
+			int dy = it.i + movey[k];
+			int dx = it.j + movex[k];
+			if (dy < 1 || dx < 1 || dy > n || dx > n)continue;
+			if (visit2[dy][dx] == 0 && arr[dy][dx] != 1) {
+				t2.push({ dy,dx,it.cnt + 1 });
+				visit2[dy][dx] = it.cnt + 1;
+			}
+		}
+	}
+
+	dis2=visit2[y][x]-1;
+	if (dis2 == -1)return 0;//갈수없을 경우
+	texi.i = y;
+	texi.j = x;
+	oil=oil - dis2;
+	if (oil < 0)return 0;//가다가 오일 사망
+	else {
+		oil = oil + (dis2) * 2;
+		msize--;
+	}
+	return 1;
+}
+
+int main() {
+
+	cin >> n >> m >> oil;
+	msize = m;
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= n; j++) {
+			cin >> arr[i][j];
+		}
+	}
+	cin >> texi.i;
+	cin >> texi.j;
+	int si;
+	int sj;
+	int ti;
+	int tj;
+	for (int j = 1; j <= m; j++) {
+		cin >> si;
+		cin >> sj;
+		cin >> ti;
+		cin >> tj;
+		pe.push_back({ti,tj});
+		arr[si][sj] = -1 * j;
+	}
+	
+	while (1) {
+		if (oil < 0) {
+			oil = -1;
+			break;
+		}
+		if (msize==0) {
+			break;
+		}
+		if (!BFS()) {
+			oil = -1;
+			break;
+		}
+	}
+	cout << oil << endl;
+}
