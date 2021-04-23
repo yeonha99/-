@@ -1,0 +1,125 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+struct save {
+	int die = 0;
+	int dir[5][5];
+	int i;
+	int j;
+	int index = 0;
+};
+struct smell {
+	int val;
+	int t;
+};
+int n;
+int m;
+int knum;
+int movei[5] = { 0,-1,1,0,0 };
+int movej[5] = { 0,0,0,-1,1 };
+save shark[401];
+int map[21][21];
+smell visit[21][21];
+int main() {
+	cin >> n >> m >> knum;
+	int val;
+	int num = m;
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= n; j++) {
+			cin >> map[i][j];
+			shark[map[i][j]].i = i;
+			shark[map[i][j]].j = j;
+		}
+	}
+	for (int k = 1; k <=m; k++) {
+		cin >> shark[k].index;
+
+	}
+	for (int i = 1; i <= m; i++) {
+		for (int view = 1; view <= 4; view++) {
+			for (int k = 1; k <= 4; k++) {
+				cin >> shark[i].dir[view][k];
+			}
+		}
+	}
+	int roop = 0;
+
+	while(1){
+		roop++;
+		vector<int> temp[21][21];
+
+		for (int k = 1; k <= m; k++) {
+			if (shark[k].die == 1)continue;
+			visit[shark[k].i][shark[k].j].val = k;
+			visit[shark[k].i][shark[k].j].t=knum;
+		}
+		for (int k = 1; k <= m; k++) {
+			if (shark[k].die == 1)continue;
+			int y = shark[k].i;
+			int x = shark[k].j;
+			int ind = shark[k].index;
+			bool ok = 0;
+			for (int check = 1; check <= 4; check++) {
+				int ny = y + movei[shark[k].dir[ind][check]];
+				int nx = x + movej[shark[k].dir[ind][check]];
+				if (ny<1 || nx<1 || ny>n || nx>n)continue;
+				if (visit[ny][nx].val == 0) {
+					shark[k].i = ny;
+					shark[k].j = nx;
+					shark[k].index = shark[k].dir[ind][check];
+					temp[ny][nx].push_back(k);
+					ok = 1;
+					break;
+				}
+			}
+			if (ok == 0) {
+				for (int check = 1; check <= 4; check++) {
+					int ny = y + movei[shark[k].dir[ind][check]];
+					int nx = x + movej[shark[k].dir[ind][check]];
+					if (ny<1 || nx<1 || ny>n || nx>n)continue;
+					if (visit[ny][nx].val == k) {
+						shark[k].i = ny;
+						shark[k].j = nx;
+						shark[k].index = shark[k].dir[ind][check];
+						temp[ny][nx].push_back(k);
+						break;
+					}
+				}
+			}
+		}
+	
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= n; j++) {
+				map[i][j] = 0;
+				if (!temp[i][j].empty()) {
+					if (temp[i][j].size() == 1) {
+						map[i][j] = temp[i][j][0];
+					}
+					else {
+						map[i][j] = temp[i][j][0];
+						for (int m = 1; m < temp[i][j].size(); m++) {
+							shark[temp[i][j][m]].die = 1;
+							num--;
+						}
+					}
+			}
+			}
+		}
+
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= n; j++) {
+				if (visit[i][j].val != 0) {
+					visit[i][j].t--;
+					if (visit[i][j].t == 0) {
+						visit[i][j].val = 0;
+					}
+				}
+			}
+		}
+		if (num == 1)break;
+		if (roop == 1001)break;
+	}
+	if (roop == 1001)roop = -1;
+	cout << roop << endl;
+}
