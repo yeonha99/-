@@ -1,0 +1,57 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+int n;
+int h;
+int m;
+int map[31][11];
+int answer = 987654321;
+bool solve() {
+	for (int i = 1; i <= n; i++) {
+		int line = i;
+		for (int j = 1; j <= h; j++) {
+			if (map[j][line] == 1)line++;
+			else if (map[j][line - 1] == 1)line--;
+		}
+		if (line != i) {
+			return 0;
+		}
+	}
+	return 1;
+}
+void DFS(int y,int num) {
+	if (num >= 4)return;
+
+	if (solve()) {
+		answer=min(answer, num);
+		return;
+	}
+	for (int j = y; j <= h; j++) {
+		for (int i = 1; i <n; i++) {
+			if (map[j][i] == 1)continue;
+			if (map[j][i + 1] == 1)continue;
+			if (map[j][i - 1] == 1)continue;
+			map[j][i] = 1;
+			DFS(j,num+1);
+			map[j][i] = 0;
+		}
+	}
+}
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+	
+	cin >> n >> m >> h;
+	while (m--) {
+		int y;
+		int x;
+		cin >> y >> x;
+		map[y][x] = 1;
+	}
+
+	DFS(1,0);
+	if (answer == 987654321)answer = -1;
+	cout << answer << endl;
+}
