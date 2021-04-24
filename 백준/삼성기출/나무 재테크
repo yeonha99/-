@@ -1,0 +1,99 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <queue>
+using namespace std;
+int n;
+int m;
+int k;
+int arr[11][11];
+vector<int> map[11][11];
+struct save {
+	int i;
+	int j;
+	int val;
+};
+int movei[] = { -1,-1,-1,0,0,1,1,1 };
+int movej[] = { -1,0,1,-1,1,-1,0,1 };
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+	cin >> n;
+	cin >> m;
+	cin >> k;
+	int sav[11][11];
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= n; j++) {
+			cin>> sav[i][j];
+			arr[i][j] = 5;
+		}
+	}
+	while (m--) {
+		int y;
+		int x;
+		int z;
+		cin >> y >> x >> z;
+		map[y][x].push_back(z);
+	}
+	while (k--) {
+
+		queue<save> q;
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= n; j++) {
+				if (!map[i][j].empty()) {
+					sort(map[i][j].begin(),map[i][j].end());
+					for (int k = 0; k < map[i][j].size(); k++) {
+						if (arr[i][j] - map[i][j][k] >= 0) {
+							arr[i][j] = arr[i][j] - map[i][j][k];
+							map[i][j][k]++;
+						}
+						else {
+							q.push({i,j,map[i][j][k]});
+							map[i][j].erase(map[i][j].begin()+k);
+							k--;
+						}
+					}
+				}
+			}
+		}
+		while (!q.empty()) {
+			auto it = q.front();
+			q.pop();
+			arr[it.i][it.j] += it.val / 2;
+		}
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= n; j++) {
+				if (!map[i][j].empty()) {
+					for (int k = 0; k < map[i][j].size(); k++) {
+						if (map[i][j][k] % 5 == 0) {
+							for (int id = 0; id < 8; id++) {
+								int y = movei[id] + i;
+								int x = movej[id] + j;
+								if (y<1 || x<1 || y>n || x>n) {
+									continue;
+								}
+								map[y][x].push_back(1);
+
+							}
+						}
+					}
+				}
+			}
+		}
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= n; j++) {
+				arr[i][j] += sav[i][j];
+			}
+		}
+	}
+	int sum = 0;
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= n; j++) {
+			if (!map[i][j].empty()) {
+				sum += map[i][j].size();
+			}
+		}
+	}
+	cout << sum << endl;
+}
