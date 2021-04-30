@@ -1,0 +1,46 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+int arr[101][101];
+vector<int> solution(int rows, int columns, vector<vector<int>> queries) {
+    vector<int> answer;
+    int num=1;
+    for(int i=1;i<=rows;i++){
+        for(int j=1;j<=columns;j++){
+            arr[i][j]=num;
+            num++;
+        }
+    }
+    for(int k=0;k<queries.size();k++){
+         int y1=queries[k][0];
+         int x1=queries[k][1];
+         int y2=queries[k][2];
+         int x2=queries[k][3];
+         int mins=987654321;
+    
+        int s=arr[y1][x2];
+        for(int j=x2;j>x1;j--){
+            arr[y1][j]=arr[y1][j-1];
+            mins=min(mins,arr[y1][j]);
+        }
+        for(int i=y1;i<y2;i++){
+            arr[i][x1]=arr[i+1][x1];
+            mins=min(mins,arr[i][x1]);
+        }
+        for(int j=x1;j<x2;j++){
+            arr[y2][j]=arr[y2][j+1];
+            mins=min(mins,arr[y2][j]);
+        }
+        int i;
+        for(i=y2;i>y1+1;i--){
+            arr[i][x2]=arr[i-1][x2];
+            mins=min(mins, arr[i][x2]);
+        }
+        arr[i][x2]=s;
+        mins=min(mins, arr[i][x2]);
+        answer.push_back(mins);
+    }
+    return answer;
+}
