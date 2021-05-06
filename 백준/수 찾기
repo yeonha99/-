@@ -1,0 +1,45 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int main() {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	int n;
+	int n2;
+	vector<int> arr;
+	vector<int> arr2;
+	cin >> n;
+	int in;
+	for (int i = 0; i < n; i++) {
+		cin >> in;
+		arr.push_back(in);
+	}
+	sort(arr.begin(), arr.end());
+	cin >> n2;
+	for (int i = 0; i < n2; i++) {
+		cin >> in;
+		bool flag = 0;
+		int start = 0;
+		int end = n - 1;
+		int mid = (end + start) / 2;
+		while (start <= end) {
+			if (arr[mid] == in) {
+				flag = 1;
+				break;
+			}
+			else if(arr[mid]>in){
+				end = mid - 1;
+			}
+			else {
+				start = mid + 1;
+			}
+			mid=(end + start) / 2;
+		}
+		if (flag)cout << 1 << "\n";
+		else cout << 0 << "\n";
+	}
+
+	return 0;
+}
