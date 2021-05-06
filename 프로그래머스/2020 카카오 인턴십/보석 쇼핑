@@ -1,0 +1,49 @@
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+struct save{
+    int s;
+    int e;
+    int size;
+};
+bool cmp(save a,save b){
+    if(a.size==b.size){
+        return a.s<b.s;
+    }else return a.size<b.size;
+}
+vector<int> solution(vector<string> gems) {
+    vector<int> answer;
+    vector<save> s;
+    int start=0;
+    map<string,int> m;
+    for(int i=0;i<gems.size();i++){
+     m[gems[i]]++;
+    }
+    int num=m.size();
+    m.clear();
+    for(int i=0;i<gems.size();i++){
+       m[gems[i]]++;
+    if(m.size()==num){
+       s.push_back({start,i,i-start+1});
+            while(start+1<=i){  
+             m[gems[start]]--;
+            if(m[gems[start]]==0){
+                    m.erase(gems[start]);
+            }
+            start++;
+            if(m.size()==num){
+                s.push_back({start,i,i-start+1});
+               }else break;
+                 
+            }
+        
+        }
+    }
+    sort(s.begin(),s.end(),cmp);
+    answer.push_back(s[0].s+1);
+    answer.push_back(s[0].e+1);
+    return answer;
+}
