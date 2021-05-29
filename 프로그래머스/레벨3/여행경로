@@ -1,0 +1,47 @@
+#include <string>
+#include <vector>
+#include <iostream>
+using namespace std;
+bool visit[10001]={0,};
+vector<string> answer;
+void DFS(string src,vector<vector<string>> tickets,vector<string> temp){
+    temp.push_back(src);
+    if(temp.size()==tickets.size()+1){
+
+        if(answer.size()==0){
+            for(int i=0;i<temp.size();i++){
+                answer.push_back(temp[i]);
+            }
+        }else{
+            bool check=0;
+            for(int i=0;i<answer.size();i++){
+                if(answer[i]==temp[i])continue;
+                else if(answer[i]>temp[i]){
+                    check=1;
+                 break;}
+                else break;
+                 }
+                
+            if(check==1){
+ 
+              for(int i=0;i<temp.size();i++){
+                answer[i]=temp[i];
+            }
+
+            }
+        }
+    }
+    for(int i=0;i<tickets.size();i++){
+        if(tickets[i][0]==src&&visit[i]==0){
+            visit[i]=1;
+            DFS(tickets[i][1],tickets,temp);
+            visit[i]=0;
+        }    
+    }
+}
+vector<string> solution(vector<vector<string>> tickets) {
+    vector<string> temp;
+    DFS("ICN",tickets,temp);
+ 
+    return answer;
+}
