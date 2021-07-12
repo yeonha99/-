@@ -1,0 +1,32 @@
+#include <string>
+#include <vector>
+#include <map>
+using namespace std;
+
+int solution(string s) {
+    int answer = 0;
+    string ans="";
+    map <string,int> m;
+    m["zero"]=0;
+    m["one"]=1;
+    m["two"]=2;
+    m["three"]=3;
+    m["four"]=4;
+    m["five"]=5;
+    m["six"]=6;
+    m["seven"]=7;
+    m["eight"]=8;
+    m["nine"]=9;
+    string su="";
+    for(int i=0;i<s.size();i++){
+        if('0'<=s[i]&&s[i]<='9'){
+            ans+=s[i];
+        }else su+=s[i];
+        if(m.find(su)!=m.end()){
+            ans+=to_string(m[su]);
+            su="";
+        }
+    }
+    answer=stoi(ans);
+    return answer;
+}
